@@ -1,15 +1,143 @@
 # Animal-CoT
 ### **Pose-to-Context Chain-of-Thought Reasoning with Inverse Verification for Animal Behavior Recognition**
 
-
+<p align="center">
+    <img src="https://i.imgur.com/waxVImv.png" alt="Oryx Video-ChatGPT">
+</p>
 #### Kou Yi, Yuhao Li, Guo Liu, Bohan Zhang, Yingqiu Huo
 
 #### **Northwestern Polytechnical University，Northwest A&F University**
 
 Code, datasets and pretrained models are coming!
 
-# 2026-07-14 Our code and datasets are released! Feel free to contact us if u have any problem!
-# 2026-04-26 Our Paper has been accepted as an Oral paper in ICIC 2026!
+- `2026/07/14`: Our code and datasets are released! Feel free to contact us if u have any problem!
+- `2025/04/26`:  Our Paper has been accepted as an Oral paper in ICIC 2026!
+
+<br>
+<details>
+  <summary>
+  <font size="+1">Abstract</font>
+  </summary>
+Abstract. Animal behavior recognition is crucial for animal science, smart agriculture, and wildlife monitoring. However, existing keypoint- and detection-based methods rely on implicit feature learning and lack structured reasoning, while recent vision–language models remain suboptimal for animal behavior understanding due to limited domain knowledge and high intra-class variability. To
+address these challenges, we present the first systematic exploration of multi-step Chain-of-Thought reasoning for animal behavior recognition, proposing Animal-CoT, a framework that decomposes behavior understanding into interpretable steps, including pose perception, contextual reasoning, behavior hypothesis generation, and inverse verification. This iterative reasoning process reduces semantic ambiguity and enhances robustness in challenging visual conditions. We further extend existing datasets with explicit multi-step reasoning annotations, resulting, to the best of our knowledge, in the first animal behavior recognition datasets that enable structured multimodal training. Extensive experiments on multiple benchmarks show that Animal-CoT consistently outperforms traditional
+methods and state-of-the-art multimodal VLMs, achieving up to 49.7% F1-score improvement on CBVD-5 test set, which demonstrates the effectiveness of structured Chain-of-Thought reasoning for animal behavior recognition. 
+</details>
+
+# Animal-CoT
+
+## Intro
+
+- **Animal-CoT** introduces the **first Chain-of-Thought (CoT) reasoning datasets for Animal Behavior Recognition (ABR)** by extending existing datasets with structured step-by-step language annotations. Each video is annotated with pose, context, interaction, reasoning process, and final behavior labels, enabling interpretable multimodal learning.
+
+- We propose **Animal-CoT**, a multimodal reasoning framework that fine-tunes **Qwen2.5-VL-7B-Instruct** on our CoT-annotated datasets. During training, the model learns to recognize animal behaviors through explicit reasoning rather than direct classification, while no additional supervision is required during inference.
+
+<div align=center>
+    <img src="source/framework.png" width="90%"/>
+</div>
+
+- We construct two reasoning datasets:
+
+| Dataset | Species | Videos | Frames | QA Pairs | Reasoning | Modalities |
+|:-------:|:-------:|:------:|:------:|:--------:|:---------:|:----------:|
+| CBVD-L | 1 | 5,730 | 343,800 | 5,730 | ✓ | Video + Text |
+| KABR-L | 3 | 2,490 | 498,000 | 2,490 | ✓ | Video + Text |
+| **Total** | **4** | **8,220** | **841,800** | **8,220** | ✓ | Video + Text |
+
+- Compared with existing animal behavior datasets, **CBVD-L** and **KABR-L** are the **first datasets equipped with multi-step Chain-of-Thought reasoning annotations**, bridging the gap between animal behavior recognition and multimodal reasoning.
+
+<div align=center>
+    <img src="source/dataset_pipeline.png" width="90%"/>
+</div>
+
+---
+
+## Animal-CoT Framework
+
+Our annotation pipeline consists of three stages:
+
+1. **Automatic CoT Annotation**
+   - Videos are first segmented into single-action clips.
+   - A frozen **Qwen2.5-VL-32B-Instruct** generates structured five-step Chain-of-Thought descriptions, including:
+     - Pose Attention
+     - Contextual Attention
+     - Hypothesis Generation
+     - Inverse Verification
+     - Iterative Refinement
+
+2. **Manual Verification**
+   - Five experts manually inspect all generated reasoning.
+   - Incorrect or hallucinated annotations are removed or corrected to ensure logical consistency and factual accuracy.
+
+3. **Model Fine-tuning**
+   - We fine-tune **Qwen2.5-VL-7B-Instruct** using LoRA.
+   - GroundingDINO and ByteTrack are adopted to provide tracking-based video representations before reasoning.
+
+<div align=center>
+    <img src="source/training_pipeline.png" width="90%"/>
+</div>
+
+---
+
+## Performance on Benchmarks
+
+### CBVD-5 Test Set
+
+| Method | F1-score ↑ | mAP ↑ | rAP ↑ | Recall ↑ |
+|:------|:---------:|:----:|:----:|:---------:|
+| Asbar |0.142|0.260|0.086|0.243|
+| ABIF |0.118|0.206|0.166|0.200|
+| CSP |0.400|0.506|0.280|0.395|
+| InternVL3.5-8B |0.352|0.365|0.314|0.495|
+| Kimi-VL-A3B-Thinking |0.348|0.346|0.257|0.422|
+| Qwen2.5-VL-7B-Instruct |0.339|0.378|0.254|0.399|
+| Gemma-3-12B-IT |0.358|0.401|0.250|0.335|
+| **Animal-CoT (Ours)** | **0.536** | **0.516** | **0.368** | **0.520** |
+
+---
+
+### KABR Test Set
+
+| Method | F1-score ↑ | mAP ↑ | Recall ↑ |
+|:------|:---------:|:----:|:---------:|
+| ABIF |0.108|0.140|0.140|
+| Animal-CLIP |0.381|0.353|0.387|
+| CSP |0.401|0.355|0.415|
+| InternVL3.5-8B |0.204|0.246|0.350|
+| Qwen2.5-VL-7B-Instruct |0.258|0.270|0.389|
+| Kimi-VL-A3B-Thinking |0.231|0.265|0.316|
+| Gemma-3-12B-IT |0.292|0.257|0.401|
+| **Animal-CoT (Ours)** | **0.449** | **0.385** | **0.454** |
+
+- On **CBVD-5**, Animal-CoT improves the best traditional method by **34.0%** in F1-score and **31.4%** in rumination AP.
+
+- On **KABR**, Animal-CoT achieves **12.0%** higher F1-score and **8.5%** higher mAP than the strongest traditional baseline, demonstrating superior cross-species reasoning ability.
+
+<div align=center>
+    <img src="source/performance.png" width="60%"/>
+</div>
+
+---
+
+## Visualization
+
+Qualitative comparisons on CBVD-5 and KABR.
+
+Compared with conventional VLMs, Animal-CoT performs explicit pose-context reasoning before predicting behaviors, producing more interpretable and reliable decisions while effectively reducing hallucinations.
+
+<div align=center>
+    <img src="source/visualization.png" width="90%"/>
+</div>
+
+---
+
+## Model Checkpoints
+
+| Dataset | Model |
+|:--------|:------|
+| CBVD-L | Coming Soon |
+| KABR-L | Coming Soon |
+
+---
 
 
 
@@ -269,5 +397,25 @@ Contains the JSON files used for LoRA fine-tuning.
 --eval_steps 1000 \
 --per_device_eval_batch_size 1
 ```
+
+## Citation
+
+If you find this work useful, please consider citing:
+
+```BibTeX
+@inproceedings{Kou2026AnimalCOT,
+  title={Pose-to-Context Chain-of-Thought Reasoning with Inverse Verification for Animal Behavior Recognition},
+  author={Kou, Yi and Li, Yuhao and Liu, Guo and Zhang, Bohan and Huo,Yingqiu},
+  booktitle={2026 International Conference on Intelligent Computing},
+  pages={1-12},
+  year={2026}
+}
+
+```
+
+
+## License
+This project is released under the Apache license. See [LICENSE](LICENSE) for additional details.
+
 
 > Replace `<path_to_pretrained_model>`, `<your_dataset_name>`, `<num_epochs>`, and `<output_directory>` with your own settings before training.

@@ -4,13 +4,17 @@
 <p align="center">
     <img src="https://i.imgur.com/waxVImv.png" alt="Oryx Video-ChatGPT">
 </p>
-#### Kou Yi, Yuhao Li, Guo Liu, Bohan Zhang, Yingqiu Huo
 
-#### **Northwestern Polytechnical University，Northwest A&F University**
+Kou Yi<sup>1,&dagger;</sup>, Yuhao Li<sup>2,&dagger;</sup>, Guo Liu<sup>1</sup>, Bohan Zhang<sup>1</sup>, Yingqiu Huo<sup>1,*</sup>
 
-Code, datasets and pretrained models are coming!
+&dagger; These authors contributed equally to this work. 
+<sup>*</sup> Corresponding author. 
 
-- `2026/07/14`: Our code and datasets are released! Feel free to contact us if u have any problem!
+####  <sup>1</sup> Northwest A&F University, <sup>2</sup> Northwestern Polytechnical University 
+
+
+
+- `2026/07/14`: Our code and datasets are released! :sparkler: Feel free to contact us if u have any problem!
 - `2025/04/26`:  Our Paper has been accepted as an Oral paper in ICIC 2026!
 
 <br>
@@ -23,7 +27,7 @@ address these challenges, we present the first systematic exploration of multi-s
 methods and state-of-the-art multimodal VLMs, achieving up to 49.7% F1-score improvement on CBVD-5 test set, which demonstrates the effectiveness of structured Chain-of-Thought reasoning for animal behavior recognition. 
 </details>
 
-# Animal-CoT
+
 
 ## Intro
 

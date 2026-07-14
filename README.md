@@ -415,7 +415,7 @@ If you find this work useful, please consider citing:
 
 
 ## License
-This project is released under the Apache license. See [LICENSE](LICENSE) for additional details.
+This project is released under the Apache license. See [LICENSE](LICENSE.txt) for additional details.
 
 
 > Replace `<path_to_pretrained_model>`, `<your_dataset_name>`, `<num_epochs>`, and `<output_directory>` with your own settings before training.

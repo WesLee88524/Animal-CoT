@@ -5,7 +5,7 @@
     <img src="https://i.imgur.com/waxVImv.png" alt="Oryx Video-ChatGPT">
 </p>
 
-Kou Yi<sup>1,&dagger;</sup>, Yuhao Li<sup>2,&dagger;</sup>, Guo Liu<sup>1</sup>, Bohan Zhang<sup>1</sup>, Yingqiu Huo<sup>1,*</sup>
+Yi Kou<sup>1,&dagger;</sup>, Yuhao Li<sup>2,&dagger;</sup>, Guo Liu<sup>1</sup>, Bohan Zhang<sup>1</sup>, Yingqiu Huo<sup>1,*</sup>
 
 &dagger; These authors contributed equally to this work. 
 <sup>*</sup> Corresponding author. 
